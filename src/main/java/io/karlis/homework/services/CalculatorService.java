@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
+
 @Service
 public class CalculatorService {
-    private static final int MAX_NUM_OPERATORS_SHORT = 1;
-    private static final int MAX_NUM_OPERATORS_LONG = 4;
+    private static final int MAX_NUM_OPERATORS_SHORT = 2;
+    private static final int MAX_NUM_OPERATORS_LONG = 5;
 
     public EquationResult calculateShort(String expression) {
         EquationResult answer = new EquationResult();
@@ -38,13 +39,14 @@ public class CalculatorService {
     }
 
     private static double calculate(String s, int maxNumOfOperators) {
-        long numOp = s.chars().filter(c -> c == '+' || c == '-' || c == '*' || c == '/').count();
-        if (numOp > maxNumOfOperators+1) {
+        int numOp = countNumbers(s);
+        if (numOp > maxNumOfOperators) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Expression cannot contain more than " + maxNumOfOperators + " operators");
         }
         Stack<Double> operands = new Stack<>();
         Stack<Character> operators = new Stack<>();
         StringTokenizer st = new StringTokenizer(s, "+-*/", true);
+        st.countTokens();
         boolean expectOperand = true;
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
@@ -74,7 +76,16 @@ public class CalculatorService {
     private static boolean hasPriority(char op1, char op2) {
         return (op1 != '+' && op1 != '-') || (op2 != '*' && op2 != '/');
     }
-
+    private static int countNumbers(String s) {
+        String[] tokens = s.split("[+\\-*/]");
+        int count = 0;
+        for (String token : tokens) {
+            if (!token.isEmpty()) {
+                count++;
+            }
+        }
+        return count;
+    }
     private static void applyOperator(Stack<Double> operands, char op) {
         double num2 = operands.pop();
         double num1 = operands.pop();
