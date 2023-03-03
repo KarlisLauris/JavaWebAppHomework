@@ -29,11 +29,9 @@ public class CalculatorService {
 
     public Map<String, Double> findHighLow(String[] expression) {
         Map<String, Double> map = new HashMap<>();
-        double[] values = Arrays.stream(expression)
-                .mapToDouble(Double::parseDouble)
-                .toArray();
-        double min = Arrays.stream(values).min().orElseThrow();
-        double max = Arrays.stream(values).max().orElseThrow();
+        List<String> values = new ArrayList<>(Arrays.asList(expression));
+        double min = values.stream().mapToDouble(Double::parseDouble).min().orElseThrow();
+        double max = values.stream().mapToDouble(Double::parseDouble).max().orElseThrow();
         map.put("min", min);
         map.put("max", max);
         return map;

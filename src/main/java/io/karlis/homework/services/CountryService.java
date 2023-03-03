@@ -1,5 +1,6 @@
 package io.karlis.homework.services;
 
+import com.sun.jdi.connect.Connector;
 import io.karlis.homework.dto.CountryResult;
 import lombok.SneakyThrows;
 import org.json.JSONArray;
@@ -25,7 +26,7 @@ public class CountryService {
         return countryResult;
     }
     @SneakyThrows
-    private String[] sortedCountries() {
+    private List<String> sortedCountries() {
         RestTemplate restTemplate = new RestTemplate();
 
         String response = restTemplate.getForObject(COUNTRIES_API_URL, String.class);
@@ -37,7 +38,7 @@ public class CountryService {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             countryList.add(jsonObject.getString("name"));
         }
-        return countryList.stream().sorted().toArray(String[]::new);
+        return countryList;
     }
     @SneakyThrows
     private String getCurrentLocation() throws RestClientException {
