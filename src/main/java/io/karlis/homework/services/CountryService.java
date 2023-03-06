@@ -1,6 +1,5 @@
 package io.karlis.homework.services;
 
-import com.sun.jdi.connect.Connector;
 import io.karlis.homework.dto.CountryResult;
 import lombok.SneakyThrows;
 import org.json.JSONArray;
